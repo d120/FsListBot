@@ -41,7 +41,10 @@
         <li class="list-group-item" ng-repeat="mail in mails" ng:class="{true:'not-done', false:''}[!mail.done]">
           <h4>
             {{mail.subject}}&nbsp;&nbsp;
-            <span ng-show="!mail.done" class="label label-danger">unbeantwortet</span>
+            <span ng-show="!mail.done" class="label label-danger">
+              <span class="glyphicon glyphicon-flag"></span>&nbsp;
+              unbeantwortet
+            </span>
           </h4>
           <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{mail.from.name}} &lt;{{mail.from.address}}&gt;<br />
           <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{mail.date | moment}}
@@ -56,11 +59,11 @@
               {{mail.replies.length}} weitere Nachrichten im Thread
             </a>
           </span>
-          &nbsp;&nbsp;&nbsp;<a class="no-underline" data-uid="{{mail.uid}}" ng-click="toggleThread(mail)">
+          &nbsp;&nbsp;&nbsp;<a class="no-underline btn btn-xs" ng:class="{true:'btn-warning', false:'btn-success'}[mail.done]" data-uid="{{mail.uid}}" ng-click="toggleThread(mail)">
             <span class="glyphicon" ng:class="{true:'glyphicon-remove', false:'glyphicon-ok'}[mail.done]"></span>&nbsp;
             als {{mail.done ? "offen" : "beantwortet"}} markieren
           </a>
-          &nbsp;&nbsp;&nbsp;<a class="no-underline" data-uid="{{mail.uid}}" ng-click="removeThread(mail, $index)">
+          &nbsp;&nbsp;&nbsp;<a class="no-underline btn btn-xs btn-default" data-uid="{{mail.uid}}" ng-click="removeThread(mail, $index)">
             <span class="glyphicon glyphicon-trash"></span>&nbsp;
             Thread löschen
           </a>
