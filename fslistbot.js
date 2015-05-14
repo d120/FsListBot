@@ -40,6 +40,7 @@ mailin.on('message', function (connection, data, content) {
   data.normalizedSubject = data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '');
   data.from = data.from[0];
   data.isReply = false;
+  data.uid = Date.now();
   // existiert zu dieser Nachricht schon ein Thread?
   mails.find({
     normalizedSubject: data.normalizedSubject
@@ -87,7 +88,10 @@ app.set('view engine', 'html');
 
 app.get('/', function (req, res) {
   db.get('mails').find({}, {
-    sort: [[ 'done', 'asc' ]]
+    sort: [
+      ['done', 'asc'],
+      ['date', 'desc']
+    ]
   }, function (e, docs) {
     res.render('maillist', {
       'mails': docs
