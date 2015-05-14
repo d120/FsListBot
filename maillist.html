@@ -73,7 +73,11 @@
               <ul>
                 {{#replies}}
                   <li class="padding-bottom-20">
-                    <b>{{subject}}</b><br />
+                    <b>{{subject}}</b>
+                    {{#isReply}}
+                      &nbsp;&nbsp;<span class="label label-success">Antwort</span>
+                    {{/isReply}}
+                    <br />
                     <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{date}}<br />
                     <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{from.name}} &lt;{{from.address}}&gt;
                   </li>

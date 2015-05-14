@@ -27,12 +27,13 @@ mailin.on('authorizeUser', function(connection, username, password, done) {
 
 mailin.on('message', function (connection, data, content) {
   // Nur Mails an fs-scraper@trololol.org akzeptieren
-  if (data.headers.to.indexOf('fs-scraper@trololol.org') === -1) {
+  if ((data.headers.to + data.headers.cc).indexOf('fs-scraper@trololol.org') === -1) {
     return;
   }
   var mails = db.get('mails');
   data.normalizedSubject = data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '');
   data.from = data.from[0];
+  data.isReply = false;
   // existiert zu dieser Nachricht schon ein Thread?
   mails.find({
     normalizedSubject: data.normalizedSubject
@@ -45,6 +46,7 @@ mailin.on('message', function (connection, data, content) {
         return i.address == first.from.address;
       })) {
         recievedReply = true;
+        data.isReply = true;
       }
       // diese Nachricht an den Thread anhängen
       first.replies.push(data);

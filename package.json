@@ -4,6 +4,7 @@
   "description": "Liest die Mailingliste fs@ mit und zeigt noch nicht beantwortete Mails an.",
   "main": "fslistbot.js",
   "dependencies": {
+    "bson": "^0.3.2",
     "express": "^4.12.3",
     "mailin": "^1.0.1",
     "mongo": "^0.1.0",
