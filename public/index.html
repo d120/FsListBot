@@ -9,36 +9,7 @@
     <title>fs@: die Unbeantworteten</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
-    <style>
-      html {
-        height: 100.1%;
-      }
-      footer {
-        width: 100%;
-        text-align: center;
-      }
-      .loading {
-        width: 100%;
-        text-align: center;
-        font-style: italic;
-      }
-      .list-group-item {
-        padding-left: 20px;
-      }
-      .not-done {
-        border-left: 10px solid #E44242;
-        padding-left: 10px;
-      }
-      .no-underline:hover, .no-underline:active, .no-underline:focus {
-        text-decoration: none;
-      }
-      .padding-top-15 {
-        padding-top: 15px;
-      }
-      .padding-bottom-20 {
-        padding-bottom: 20px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -67,7 +38,7 @@
         Crunching the latest data, just for you!
       </div>
       <ul class="list-group">
-        <li class="list-group-item not-done" ng-repeat="mail in mails">
+        <li class="list-group-item" ng-repeat="mail in mails" ng:class="{true:'not-done', false:''}[!mail.done]">
           <h4>
             {{mail.subject}}&nbsp;&nbsp;
             <span ng-show="!mail.done" class="label label-danger">unbeantwortet</span>
@@ -85,6 +56,14 @@
               {{mail.replies.length}} weitere Nachrichten im Thread
             </a>
           </span>
+          &nbsp;&nbsp;&nbsp;<a class="no-underline" data-uid="{{mail.uid}}" ng-click="toggleThread(mail)">
+            <span class="glyphicon" ng:class="{true:'glyphicon-remove', false:'glyphicon-ok'}[mail.done]"></span>&nbsp;
+            als {{mail.done ? "offen" : "beantwortet"}} markieren
+          </a>
+          &nbsp;&nbsp;&nbsp;<a class="no-underline" data-uid="{{mail.uid}}" ng-click="removeThread(mail, $index)">
+            <span class="glyphicon glyphicon-trash"></span>&nbsp;
+            Thread löschen
+          </a>
           <div class="padding-top-15"></div>
           <div class="collapse" id="collapse-{{mail.uid}}">
             <pre>{{mail.text}}</pre>

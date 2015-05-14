@@ -1,0 +1,31 @@
+html {
+  height: 100.1%;
+}
+footer {
+  width: 100%;
+  text-align: center;
+}
+.loading {
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+}
+.list-group-item {
+  padding-left: 20px;
+}
+.not-done {
+  border-left: 10px solid #E44242;
+  padding-left: 10px;
+}
+.no-underline:hover, .no-underline:active, .no-underline:focus {
+  text-decoration: none;
+}
+.padding-top-15 {
+  padding-top: 15px;
+}
+.padding-bottom-20 {
+  padding-bottom: 20px;
+}
+a[ng-click] {
+  cursor: pointer;
+}
