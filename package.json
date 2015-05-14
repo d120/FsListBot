@@ -1,0 +1,32 @@
+{
+  "name": "fslistbot",
+  "version": "1.0.0",
+  "description": "Liest die Mailingliste fs@ mit und zeigt noch nicht beantwortete Mails an.",
+  "main": "fslistbot.js",
+  "dependencies": {
+    "bson": "^0.3.2",
+    "express": "^4.12.3",
+    "jade": "^1.9.2",
+    "mailin": "^1.0.1",
+    "mongo": "^0.1.0",
+    "mongodb": "^2.0.31",
+    "monk": "^1.0.1",
+    "mustache-express": "^1.2.1",
+    "redis": "^0.12.1",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d120/fslistbot.git"
+  },
+  "author": "Johannes Lauinger",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/d120/fslistbot/issues"
+  },
+  "homepage": "https://github.com/d120/fslistbot"
+}
