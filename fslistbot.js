@@ -83,6 +83,7 @@ var server = app.listen(3000, 'localhost', function () {
 });
 
 app.use(express.static('public'));
+app.use(express.static('vendor'));
 app.use(bodyParser.json());
 
 app.get('/mails', function (req, res) {
