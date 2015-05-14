@@ -44,7 +44,7 @@
             <span ng-show="!mail.done" class="label label-danger">unbeantwortet</span>
           </h4>
           <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{mail.from.name}} &lt;{{mail.from.address}}&gt;<br />
-          <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{mail.date}}
+          <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{mail.date | moment}}
           <div class="padding-top-15"></div>
           <a class="no-underline" href="#collapse-{{mail.uid}}" data-toggle="collapse">
             <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
@@ -75,7 +75,7 @@
                 &nbsp;&nbsp;<span class="label label-success" ng-show="reply.isReply">Antwort</span>
                 <br />
                 <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{reply.from.name}} &lt;{{reply.from.address}}&gt;<br />
-                <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{reply.date}}
+                <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{reply.date | moment}}
                 <div class="padding-top-15"></div>
                 <a class="no-underline" href="#collapse-{{reply.uid}}" data-toggle="collapse">
                   <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
@@ -101,6 +101,7 @@
     <script src="jquery-1.11.3.min.js"></script>
     <script src="bootstrap.min.js"></script>
     <script src="angular.js"></script>
+    <script src="moment-with-locales.min.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

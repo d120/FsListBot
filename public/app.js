@@ -22,4 +22,11 @@ angular.module('fsListBot', [])
       });
     }
   };
+})
+.filter('moment', function() {
+  return function (input) {
+    return moment(input).format('LLLL');
+  };
 });
+
+moment.locale('de');
