@@ -4,15 +4,12 @@
   "description": "Liest die Mailingliste fs@ mit und zeigt noch nicht beantwortete Mails an.",
   "main": "fslistbot.js",
   "dependencies": {
-    "bson": "^0.3.2",
     "express": "^4.12.3",
-    "jade": "^1.9.2",
     "mailin": "^1.0.1",
     "mongo": "^0.1.0",
     "mongodb": "^2.0.31",
     "monk": "^1.0.1",
     "mustache-express": "^1.2.1",
-    "redis": "^0.12.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {},
