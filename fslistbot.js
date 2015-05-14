@@ -21,14 +21,20 @@ mailin.start({
   disableWebhook: true
 });
 
-mailin.on('authorizeUser', function(connection, username, password, done) {
+mailin.on('authorizeUser', function (connection, username, password, done) {
   done(new Error("Unauthorized!"), false);
 });
 
+mailin.on('startMessage', function (connection) {
+  console.log(connection);
+});
+
 mailin.on('message', function (connection, data, content) {
+  console.log(connection);
+  console.log(data);
   // Nur Mails an fs-scraper@trololol.org akzeptieren
   if ((data.headers.to + data.headers.cc).indexOf('fs-scraper@trololol.org') === -1) {
-    return;
+    //return;
   }
   var mails = db.get('mails');
   data.normalizedSubject = data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '');
