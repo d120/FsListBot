@@ -31,14 +31,13 @@ mailin.on('message', function (connection, data, content) {
   data.from = data.from[0];
   // existiert zu dieser Nachricht schon ein Thread?
   mails.find({
-    normalizedSubject: data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '')
+    normalizedSubject: data.normalizedSubject
   }, {}, function (e, docs) {
     if (docs.length > 0) {
       var first = docs[docs.length - 1],
           recievedReply = false;
       // ist dies eine Nachricht an den Absender der Nachricht?
       if (_.any(data.to, function (i) {
-        console.log (i.address + ' vs ' + first.from.address);
         return i.address == first.from.address;
       })) {
         recievedReply = true;
@@ -46,11 +45,11 @@ mailin.on('message', function (connection, data, content) {
       // diese Nachricht an den Thread anhängen
       first.replies.push(data);
       mails.update({
-        normalizedSubject: data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '')
+        normalizedSubject: data.normalizedSubject
       }, {
         $set: {
           replies: first.replies,
-          done: first.done | recievedReply
+          done: first.done || recievedReply
         }
       });
       console.log('Followup message:' + (recievedReply ? ' Reply:' : '') + ' For ' + first.subject + ': ' + first.from.name + ' <' + first.from.address + '>: ' + data.subject);
@@ -75,7 +74,9 @@ app.set('views', __dirname);
 app.set('view engine', 'html');
 
 app.get('/', function (req, res) {
-  db.get('mails').find({}, {}, function (e, docs) {
+  db.get('mails').find({}, {
+    sort: [[ 'done', 'asc' ]]
+  }, function (e, docs) {
     res.render('maillist', {
       'mails': docs
     });

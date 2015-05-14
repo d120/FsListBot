@@ -9,6 +9,25 @@
     <title>fs@: die Unbeantworteten</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <style>
+      html {
+        height: 100.1%;
+      }
+      footer {
+        width: 100%;
+        text-align: center;
+      }
+      .not-done {
+        border-left: 10px solid #E44242;
+        padding-left: 10px;
+      }
+      .no-underline:hover, .no-underline:active, .no-underline:focus {
+        text-decoration: none;
+      }
+      .padding-bottom-20 {
+        padding-bottom: 20px;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -33,24 +52,47 @@
     </nav>
 
     <div class="container">
-      <p>Ordentliches Design folgt in Kürze... Nachrichten in Threadform:</p>
-
-      <ul>
+      <ul class="list-group">
         {{#mails}}
-          <li>
-           <b>{{subject}}</b> {{from.name}} &lt;{{from.address}}&gt;
-            <ul>
-              {{#replies}}
-                <li>
-                  <b>{{subject}}</b> {{from.name}} &lt;{{from.address}}&gt;
-                </li>
-              {{/replies}}
-            </ul>
+          <li class="list-group-item{{^done}} not-done{{/done}}">
+            <h4>
+              {{subject}}
+              {{^done}}
+                &nbsp;&nbsp;<span class="label label-danger">unbeantwortet</span>
+              {{/done}}
+            </h4>
+            <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{from.name}} &lt;{{from.address}}&gt;<br />
+            <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{date}}
+            {{#replies.length}}
+            <br /><br />
+            <a class="no-underline" href="#collapse-{{normalizedSubject}}" data-toggle="collapse">
+              <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
+              {{replies.length}} weitere Nachrichten im Thread
+            </a><br /><br />
+            <div class="collapse" id="collapse-{{normalizedSubject}}">
+              <ul>
+                {{#replies}}
+                  <li class="padding-bottom-20">
+                    <b>{{subject}}</b><br />
+                    <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{date}}<br />
+                    <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{from.name}} &lt;{{from.address}}&gt;
+                  </li>
+                {{/replies}}
+              </ul>
+            </div>
+            {{/replies.length}}
           </li>
         {{/mails}}
       </ul>
     </div>
 
+    <footer>
+      <img src="http://d120.de/d120de/images/das-wesen-der-informatik.png" />
+    </footer>
+
     <a href="https://github.com/d120/FsListBot"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   </body>
 </html>
