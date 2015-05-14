@@ -13,7 +13,8 @@ var mailin = require('mailin'),
     db = monk('localhost:27017/fs'),
     express = require('express'),
     app = express(),
-    _ = require('underscore');
+    _ = require('underscore'),
+    bodyParser = require('body-parser');
 
 mailin.start({
   port: 25,
@@ -82,8 +83,9 @@ var server = app.listen(3000, 'localhost', function () {
 });
 
 app.use(express.static('public'));
+app.use(bodyParser.json());
 
-app.get('/data', function (req, res) {
+app.get('/mails', function (req, res) {
   db.get('mails').find({}, {
     sort: [
       ['done', 'asc'],
@@ -92,4 +94,14 @@ app.get('/data', function (req, res) {
   }, function (e, docs) {
     res.json(docs);
   });
+});
+
+app.put('/mails/:uid', function (req, res) {
+  console.log('toggling thread with uid ' + req.params.uid + ' to state ' + req.body.done);
+  res.end();
+});
+
+app.delete('/mails/:uid', function (req, res) {
+  console.log('deleting thread with uid ' + req.params.uid);
+  res.end();
 });
