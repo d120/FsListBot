@@ -26,6 +26,10 @@ mailin.on('authorizeUser', function(connection, username, password, done) {
 });
 
 mailin.on('message', function (connection, data, content) {
+  // Nur Mails an fs-scraper@trololol.org akzeptieren
+  if (data.headers.to.indexOf('fs-scraper@trololol.org') === -1) {
+    return;
+  }
   var mails = db.get('mails');
   data.normalizedSubject = data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '');
   data.from = data.from[0];
