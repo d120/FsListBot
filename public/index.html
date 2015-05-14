@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="fsListBot">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +16,11 @@
       footer {
         width: 100%;
         text-align: center;
+      }
+      .loading {
+        width: 100%;
+        text-align: center;
+        font-style: italic;
       }
       .list-group-item {
         padding-left: 20px;
@@ -57,60 +62,53 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container" ng-controller="mailsCtrl">
+      <div class="loading" ng-show="loading">
+        Crunching the latest data, just for you!
+      </div>
       <ul class="list-group">
-        {{#mails}}
-          <li class="list-group-item{{^done}} not-done{{/done}}">
-            <h4>
-              {{subject}}
-              {{^done}}
-                &nbsp;&nbsp;<span class="label label-danger">unbeantwortet</span>
-              {{/done}}
-            </h4>
-            <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{from.name}} &lt;{{from.address}}&gt;<br />
-            <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{date}}
-            <div class="padding-top-15"></div>
-            <a class="no-underline" href="#collapse-{{uid}}" data-toggle="collapse">
+        <li class="list-group-item not-done" ng-repeat="mail in mails">
+          <h4>
+            {{mail.subject}}&nbsp;&nbsp;
+            <span ng-show="!mail.done" class="label label-danger">unbeantwortet</span>
+          </h4>
+          <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{mail.from.name}} &lt;{{mail.from.address}}&gt;<br />
+          <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{mail.date}}
+          <div class="padding-top-15"></div>
+          <a class="no-underline" href="#collapse-{{mail.uid}}" data-toggle="collapse">
+            <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
+            Nachrichteninhalt
+          </a>
+          <span ng-show="mail.replies.length">
+            &nbsp;&nbsp;&nbsp;<a class="no-underline" href="#collapse-{{mail.normalizedSubject}}" data-toggle="collapse">
               <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
-              Nachrichteninhalt
+              {{mail.replies.length}} weitere Nachrichten im Thread
             </a>
-            {{#replies.length}}
-              &nbsp;&nbsp;&nbsp;<a class="no-underline" href="#collapse-{{normalizedSubject}}" data-toggle="collapse">
-                <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
-                {{replies.length}} weitere Nachrichten im Thread
-              </a>
-              {{/replies.length}}
-              <div class="padding-top-15"></div>
-              <div class="collapse" id="collapse-{{uid}}">
-                <pre>{{text}}</pre>
-              </div>
-            {{#replies.length}}
-              <div class="collapse" id="collapse-{{normalizedSubject}}">
-                <ul>
-                  {{#replies}}
-                    <li class="padding-bottom-20">
-                      <b>{{subject}}</b>
-                      {{#isReply}}
-                        &nbsp;&nbsp;<span class="label label-success">Antwort</span>
-                      {{/isReply}}
-                      <br />
-                      <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{from.name}} &lt;{{from.address}}&gt;<br />
-                      <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{date}}
-                      <div class="padding-top-15"></div>
-                      <a class="no-underline" href="#collapse-{{uid}}" data-toggle="collapse">
-                        <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
-                        Nachrichteninhalt
-                      </a>
-                      <div class="collapse" id="collapse-{{uid}}">
-                        <pre>{{text}}</pre>
-                      </div>
-                    </li>
-                  {{/replies}}
-                </ul>
-              </div>
-            {{/replies.length}}
-          </li>
-        {{/mails}}
+          </span>
+          <div class="padding-top-15"></div>
+          <div class="collapse" id="collapse-{{mail.uid}}">
+            <pre>{{mail.text}}</pre>
+          </div>
+          <div class="collapse" id="collapse-{{mail.normalizedSubject}}">
+            <ul>
+              <li class="padding-bottom-20" ng-repeat="reply in mail.replies">
+                <b>{{reply.subject}}</b>
+                &nbsp;&nbsp;<span class="label label-success" ng-show="reply.isReply">Antwort</span>
+                <br />
+                <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{reply.from.name}} &lt;{{reply.from.address}}&gt;<br />
+                <span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;{{reply.date}}
+                <div class="padding-top-15"></div>
+                <a class="no-underline" href="#collapse-{{reply.uid}}" data-toggle="collapse">
+                  <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
+                  Nachrichteninhalt
+                </a>
+                <div class="collapse" id="collapse-{{reply.uid}}">
+                  <pre>{{reply.text}}</pre>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </div>
 
@@ -124,8 +122,6 @@
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular.js"></script>
-    <script>
-
-    </script>
+    <script src="app.js"></script>
   </body>
 </html>

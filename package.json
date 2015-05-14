@@ -10,7 +10,6 @@
     "mongo": "^0.1.0",
     "mongodb": "^2.0.31",
     "monk": "^1.0.1",
-    "mustache-express": "^1.2.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {},

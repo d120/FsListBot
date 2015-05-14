@@ -13,7 +13,6 @@ var mailin = require('mailin'),
     db = monk('localhost:27017/fs'),
     express = require('express'),
     app = express(),
-    mustache = require('mustache-express'),
     _ = require('underscore');
 
 mailin.start({
@@ -82,19 +81,15 @@ var server = app.listen(3000, 'localhost', function () {
   console.log('FsListBot for fs@ listening at http://%s:%s', host, port);
 });
 
-app.engine('html', mustache());
-app.set('views', __dirname);
-app.set('view engine', 'html');
+app.use(express.static('public'));
 
-app.get('/', function (req, res) {
+app.get('/data', function (req, res) {
   db.get('mails').find({}, {
     sort: [
       ['done', 'asc'],
       ['date', 'desc']
     ]
   }, function (e, docs) {
-    res.render('maillist', {
-      'mails': docs
-    });
+    res.json(docs);
   });
 });
