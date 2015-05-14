@@ -8,7 +8,6 @@ angular.module('fsListBot', [])
   });
 
   $scope.toggleThread = function (item) {
-    console.log('toggling thread with uid ' + item.uid);
     $http.put('mails/' + item.uid, {
       done: !item.done
     }).success(function (res) {
@@ -17,9 +16,10 @@ angular.module('fsListBot', [])
   };
 
   $scope.removeThread = function (item, index) {
-    console.log('removing thread with uid ' + item.uid);
-    $http.delete('mails/' + item.uid).success(function (res) {
-      $scope.mails.splice(index, 1);
-    });
+    if (confirm('Diesen Thread wirklich unwiderruflich aus der Datenbank löschen?')) {
+      $http.delete('mails/' + item.uid).success(function (res) {
+        $scope.mails.splice(index, 1);
+      });
+    }
   };
 });

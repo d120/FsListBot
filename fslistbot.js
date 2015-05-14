@@ -98,10 +98,20 @@ app.get('/mails', function (req, res) {
 
 app.put('/mails/:uid', function (req, res) {
   console.log('toggling thread with uid ' + req.params.uid + ' to state ' + req.body.done);
+  db.get('mails').findAndModify({
+    uid: +req.params.uid
+  }, {
+    $set: {
+      done: req.body.done
+    }
+  });
   res.end();
 });
 
 app.delete('/mails/:uid', function (req, res) {
   console.log('deleting thread with uid ' + req.params.uid);
+  db.get('mails').remove({
+    uid: +req.params.uid
+  });
   res.end();
 });
