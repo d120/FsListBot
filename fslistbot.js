@@ -64,7 +64,7 @@ mailin.on('message', function (connection, data, content) {
   });
 });
 
-var server = app.listen(3000, function () {
+var server = app.listen(3000, 'localhost', function () {
   var host = server.address().address,
       port = server.address().port;
   console.log('FsListBot for fs@ listening at http://%s:%s', host, port);
