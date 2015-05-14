@@ -54,16 +54,16 @@
             Nachrichteninhalt
           </a>
           <span ng-show="mail.replies.length">
-            &nbsp;&nbsp;&nbsp;<a class="no-underline" href="#collapse-{{mail.normalizedSubject}}" data-toggle="collapse">
+            &nbsp;&nbsp;&nbsp;<div class="padding-top-15 visible-xs"></div><a class="no-underline" href="#collapse-{{mail.normalizedSubject}}" data-toggle="collapse">
               <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;
               {{mail.replies.length}} weitere Nachrichten im Thread
             </a>
           </span>
-          &nbsp;&nbsp;&nbsp;<a class="no-underline btn btn-xs" ng:class="{true:'btn-warning', false:'btn-success'}[mail.done]" data-uid="{{mail.uid}}" ng-click="toggleThread(mail)">
+          &nbsp;&nbsp;&nbsp;<div class="padding-top-15 visible-xs"></div><a class="no-underline btn btn-xs" ng:class="{true:'btn-warning', false:'btn-success'}[mail.done]" data-uid="{{mail.uid}}" ng-click="toggleThread(mail)">
             <span class="glyphicon" ng:class="{true:'glyphicon-remove', false:'glyphicon-ok'}[mail.done]"></span>&nbsp;
             als {{mail.done ? "offen" : "beantwortet"}} markieren
           </a>
-          &nbsp;&nbsp;&nbsp;<a class="no-underline btn btn-xs btn-default" data-uid="{{mail.uid}}" ng-click="removeThread(mail, $index)">
+          &nbsp;&nbsp;&nbsp;<div class="padding-top-15 visible-xs"></div><a class="no-underline btn btn-xs btn-default" data-uid="{{mail.uid}}" ng-click="removeThread(mail, $index)">
             <span class="glyphicon glyphicon-trash"></span>&nbsp;
             Thread löschen
           </a>
