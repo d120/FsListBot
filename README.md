@@ -18,5 +18,6 @@ ProxyPassReverse / http://localhost:3000/
 
 ## Lizenz
 
-GPL Version 2 (in diesem Repository enthalten)\\
+GPL Version 2 (in diesem Repository enthalten)
+
 Copyright (C) 2015 Johannes Lauinger
