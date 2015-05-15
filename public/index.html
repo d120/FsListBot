@@ -9,6 +9,7 @@
     <title>fs@: die Unbeantworteten</title>
 
     <link rel="stylesheet" href="bootstrap.min.css" />
+    <link rel="stylesheet" href="bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -37,12 +38,30 @@
       <div class="loading padding-bottom-20" ng-show="loading">
         Crunching the latest data, just for you!
       </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-filter"></span> Filter:
+        </div>
+        <div class="panel-body">
+          <form class="form form-inline">
+            <label for="since">
+              E-Mails anzeigen seit dem&nbsp;
+            </label>
+            <div class="input-group date datepicker">
+              <input type="text" id="since" ng-model="since" ng-change="alert()" class="form-control" />
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
       <p>
-        <b>{{mails | notdone}} E-Mails müssen noch beantwortet werden</b> ({{mails.length}} Threads insgesamt).&nbsp;&nbsp;
-        <span ng-show="(mails | notdone) === 0"><span class="glyphicon glyphicon-thumbs-up"></span> Sehr gut!</span>
+        <b>{{mails | laterThan:since | notdone}} E-Mails müssen noch beantwortet werden</b> ({{(mails | laterThan:since).length}} Threads insgesamt).&nbsp;&nbsp;
+        <span ng-show="(mails | laterThan:since | notdone) === 0"><span class="glyphicon glyphicon-thumbs-up"></span> Sehr gut!</span>
       </p>
       <ul class="list-group padding-top-15">
-        <li class="list-group-item" ng-repeat="mail in mails" ng:class="{true:'not-done', false:''}[!mail.done]">
+        <li class="list-group-item" ng-repeat="mail in mails | laterThan:since" ng:class="{true:'not-done', false:''}[!mail.done]">
           <h4>
             {{mail.subject}}&nbsp;&nbsp;
             <span ng-show="!mail.done" class="text-danger">
@@ -109,6 +128,7 @@
     <script src="bootstrap.min.js"></script>
     <script src="angular.js"></script>
     <script src="moment-with-locales.min.js"></script>
+    <script src="bootstrap-datetimepicker.min.js"></script>
     <script src="jquery.konami.min.js" type="text/javascript"></script>
     <script src="jquery.transform2d.js" type="text/javascript"></script>
     <script src="app.js"></script>

@@ -17,7 +17,7 @@ var mailin = require('mailin'),
     bodyParser = require('body-parser');
 
 mailin.start({
-  port: 25,
+  port: 3001,
   disableWebhook: true
 });
 

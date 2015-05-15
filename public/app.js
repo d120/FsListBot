@@ -2,6 +2,7 @@ angular.module('fsListBot', [])
 .controller('mailsCtrl', function ($scope, $http) {
   $scope.loading = true;
   $scope.mails = [];
+  $scope.since = '1. Mai 2015';
 
   $http.get('mails').then(function (res) {
     $scope.mails = res.data;
@@ -24,10 +25,42 @@ angular.module('fsListBot', [])
       });
     }
   };
+
+  moment.locale('de');
+
+  $(function(){
+    $('.datepicker').datetimepicker({
+      locale: 'de',
+      format: 'LL'
+    }).on('dp.change', function(){
+      $('#since').blur();
+    });
+    $('#since').blur(function(e){
+      $scope.since = $('#since').val();
+      $scope.$apply();
+    });
+
+    $(window).on('konami', function(){
+      $('#wesen').animate({
+        'transform': 'scale(12)'
+      }, 1000).animate({
+        opacity: 0
+      }, 4000, function () {
+        $(this).hide();
+      });
+    }).konami();
+  });
 })
 .filter('moment', function() {
   return function (input) {
     return moment(input).format('LLLL');
+  };
+})
+.filter('laterThan', function() {
+  return function (input, since) {
+    return input.filter(function (x) {
+      return moment(since, 'LL').isBefore(moment(x.date));
+    });
   };
 })
 .filter('notdone', function() {
@@ -36,18 +69,4 @@ angular.module('fsListBot', [])
       return !x.done;
     }).length;
   };
-});
-
-moment.locale('de');
-
-$(function(){
-  $(window).on('konami', function(){
-    $('#wesen').animate({
-      'transform': 'scale(12)'
-    }, 1000).animate({
-      opacity: 0
-    }, 4000, function () {
-      $(this).hide();
-    });
-  }).konami();
 });
