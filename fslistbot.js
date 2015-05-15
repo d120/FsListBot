@@ -18,27 +18,28 @@ var mailin = require('mailin'),
 
 mailin.start({
   port: 3001,
-  disableWebhook: true
+  disableWebhook: true,
+  logLevel: 'warn'
 });
+console.log('mailin smtp server listening for fs-scraper@trololol.org at 127.0.0.1:3001');
 
 mailin.on('authorizeUser', function (connection, username, password, done) {
   done(new Error("Unauthorized!"), false);
 });
 
 mailin.on('message', function (connection, data, content) {
-  console.log(connection);
-  console.log(data);
   // Nur Mails an fs-scraper@trololol.org akzeptieren
-  if (_.contains(connection.to, 'fs-scraper@trololol.org')) {
-    console.log('FS!!!!');
-  } else {
-    console.log('SPAM!!!!');
+  if (! _.contains(connection.to, 'fs-scraper@trololol.org')) {
+    console.log('Recieved Spam: ' + data.subject);
+    return;
   }
   var mails = db.get('mails');
   data.normalizedSubject = data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '');
   data.from = data.from[0];
   data.isReply = false;
   data.uid = Date.now();
+  data.replies = [];
+  data.done = false;
   // existiert zu dieser Nachricht schon ein Thread?
   mails.find({
     normalizedSubject: data.normalizedSubject
@@ -66,8 +67,6 @@ mailin.on('message', function (connection, data, content) {
       console.log('Followup message:' + (recievedReply ? ' Reply:' : '') + ' For ' + first.subject + ': ' + first.from.name + ' <' + first.from.address + '>: ' + data.subject);
     } else {
       // neuen Thread einfügen (diese Nachricht)
-      data.replies = [];
-      data.done = false;
       mails.insert(data);
       console.log('New thread: ' + data.from.name + ' <' + data.from.address + '>: ' + data.subject);
     }
@@ -77,7 +76,7 @@ mailin.on('message', function (connection, data, content) {
 var server = app.listen(3000, 'localhost', function () {
   var host = server.address().address,
       port = server.address().port;
-  console.log('FsListBot for fs@ listening at http://%s:%s', host, port);
+  console.log('FsListBot for fs@ listening at http://%s:%s\n', host, port);
 });
 
 app.use(express.static('public'));
