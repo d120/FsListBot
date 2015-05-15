@@ -30,3 +30,15 @@ angular.module('fsListBot', [])
 });
 
 moment.locale('de');
+
+$(function(){
+  $(window).on('konami', function(){
+    $('#wesen').animate({
+      'transform': 'scale(12)'
+    }, 1000).animate({
+      opacity: 0
+    }, 4000, function () {
+      $(this).hide();
+    });
+  }).konami();
+});
