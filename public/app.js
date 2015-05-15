@@ -2,7 +2,7 @@ angular.module('fsListBot', [])
 .controller('mailsCtrl', function ($scope, $http) {
   $scope.loading = true;
   $scope.mails = [];
-  $scope.since = '1. Mai 2015';
+  $scope.since = '13. Mai 2015';
 
   $http.get('mails').then(function (res) {
     $scope.mails = res.data;
