@@ -30,9 +30,9 @@ mailin.on('message', function (connection, data, content) {
   console.log(data);
   // Nur Mails an fs-scraper@trololol.org akzeptieren
   if (_.contains(connection.to, 'fs-scraper@trololol.org')) {
-    console.log('SPAM!!!!');
-  } else {
     console.log('FS!!!!');
+  } else {
+    console.log('SPAM!!!!');
   }
   var mails = db.get('mails');
   data.normalizedSubject = data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '');

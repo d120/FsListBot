@@ -1,6 +1,8 @@
 angular.module('fsListBot', [])
 .controller('mailsCtrl', function ($scope, $http) {
   $scope.loading = true;
+  $scope.mails = [];
+
   $http.get('mails').then(function (res) {
     $scope.mails = res.data;
   }).finally(function () {
