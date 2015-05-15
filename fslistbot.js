@@ -25,16 +25,14 @@ mailin.on('authorizeUser', function (connection, username, password, done) {
   done(new Error("Unauthorized!"), false);
 });
 
-mailin.on('startMessage', function (connection) {
-  console.log(connection);
-});
-
 mailin.on('message', function (connection, data, content) {
   console.log(connection);
   console.log(data);
   // Nur Mails an fs-scraper@trololol.org akzeptieren
-  if ((data.headers.to + data.headers.cc).indexOf('fs-scraper@trololol.org') === -1) {
-    //return;
+  if (_.contains(connection.to, 'fs-scraper@trololol.org')) {
+    console.log('SPAM!!!!');
+  } else {
+    console.log('FS!!!!');
   }
   var mails = db.get('mails');
   data.normalizedSubject = data.subject.toLowerCase().replace(/fwd:|re:|aw:|\[.*\]| /gi, '');

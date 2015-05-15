@@ -34,14 +34,18 @@
     </nav>
 
     <div class="container" ng-controller="mailsCtrl">
-      <div class="loading" ng-show="loading">
+      <div class="loading padding-bottom-20" ng-show="loading">
         Crunching the latest data, just for you!
       </div>
-      <ul class="list-group">
+      <p>
+        <b>{{mails | notdone}} E-Mails müssen noch beantwortet werden</b> ({{mails.length}} Threads insgesamt).&nbsp;&nbsp;
+        <span ng-show="(mails | notdone) === 0"><span class="glyphicon glyphicon-thumbs-up"></span> Sehr gut!</span>
+      </p>
+      <ul class="list-group padding-top-15">
         <li class="list-group-item" ng-repeat="mail in mails" ng:class="{true:'not-done', false:''}[!mail.done]">
           <h4>
             {{mail.subject}}&nbsp;&nbsp;
-            <span ng-show="!mail.done" class="label label-danger">
+            <span ng-show="!mail.done" class="text-danger">
               <span class="glyphicon glyphicon-flag"></span>&nbsp;
               unbeantwortet
             </span>

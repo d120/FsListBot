@@ -27,6 +27,13 @@ angular.module('fsListBot', [])
   return function (input) {
     return moment(input).format('LLLL');
   };
+})
+.filter('notdone', function() {
+  return function (input) {
+    return input.filter(function (x) {
+      return !x.done;
+    }).length;
+  };
 });
 
 moment.locale('de');
