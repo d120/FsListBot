@@ -1,0 +1,14 @@
+
+    <div class="container">
+      <iframe src="https://www.fachschaft.informatik.tu-darmstadt.de/wiki" class="fullsize" frameborder="0" id="protokoll"></iframe>
+    </div>
+
+    <script src="jquery-1.11.3.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script>
+      $(function () {
+        var lastDate = '2015-05-13';
+        $('#protokoll').attr('src', 'https://www.fachschaft.informatik.tu-darmstadt.de/wiki/Fachschaftssitzung/' + lastDate);
+      });
+    </script>
+    

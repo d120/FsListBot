@@ -14,7 +14,8 @@ var mailin = require('mailin'),
     express = require('express'),
     app = express(),
     _ = require('underscore'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    fs = require('fs');
 
 mailin.start({
   port: 3001,
@@ -73,6 +74,42 @@ mailin.on('message', function (connection, data, content) {
   });
 });
 
+
+var htmlMenu = {
+  '/': 'Unbeantwortete E-Mails',
+  '/protokoll': 'Rückblick',
+  '/inbox': 'Inbox',
+  '/sitzungspad': 'Sitzungspad',
+  '/kalender': 'Kalender'
+};
+var templateFile = fs.readFileSync('./html/template.html').toString();
+function buildMenuList(current) {
+  return Object.keys(htmlMenu).map(function(path) {
+    return '<li' + (path == current ? ' class="active"' : '') + '>' + 
+           '<a href="' + path + '">' + htmlMenu[path] + '</a></li>';
+  }).join("\n");
+}
+function deliverHtml(req, res, next) {
+  if (!htmlMenu[req.url]) {
+    next(); return;
+  }
+  var file = "./html/index.html";
+  if (req.url != "/") file = "./html" + req.url + ".html";
+  fs.readFile(file, function(err, result) {
+    if (err) {
+      result = err.toString();
+    }
+    
+    res.send(templateFile
+      .replace(/\{\{title\}\}/, htmlMenu[req.url])
+      .replace(/\{\{menu\}\}/, buildMenuList(req.url))
+      .replace(/\{\{content\}\}/, result)
+    );
+    
+  });
+}
+
+
 var server = app.listen(3000, 'localhost', function () {
   var host = server.address().address,
       port = server.address().port;
@@ -81,6 +118,7 @@ var server = app.listen(3000, 'localhost', function () {
 
 app.use(express.static('public'));
 app.use(express.static('vendor'));
+app.use(deliverHtml);
 app.use(bodyParser.json());
 
 app.get('/mails', function (req, res) {
@@ -113,3 +151,5 @@ app.delete('/mails/:uid', function (req, res) {
   });
   res.end();
 });
+
+

@@ -1,14 +1,15 @@
 <!doctype html>
-<html>
+<html ng-app="fsListBot">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <meta name="author" content="Johannes Lauinger" />
 
-    <title>Rückblick auf den letzten Streich</title>
+    <title>{{title}}</title>
 
     <link rel="stylesheet" href="bootstrap.min.css" />
+    <link rel="stylesheet" href="bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -25,25 +26,12 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar">
           <ul class="nav navbar-nav">
-            <li><a href="index.html">Unbeantwortete E-Mails</a></li>
-            <li class="active"><a href="protokoll.html">Rückblick</a></li>
-            <li><a href="kalender.html">Kalender</a></li>
+            {{menu}}
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="container">
-      <iframe src="https://www.fachschaft.informatik.tu-darmstadt.de/wiki" class="fullsize" frameborder="0" id="protokoll"></iframe>
-    </div>
-
-    <script src="jquery-1.11.3.min.js"></script>
-    <script src="bootstrap.min.js"></script>
-    <script>
-      $(function () {
-        var lastDate = '2015-05-13';
-        $('#protokoll').attr('src', 'https://www.fachschaft.informatik.tu-darmstadt.de/wiki/Fachschaftssitzung/' + lastDate);
-      });
-    </script>
+    {{content}}
   </body>
 </html>
