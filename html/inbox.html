@@ -1,0 +1,10 @@
+<iframe src="https://www.fachschaft.informatik.tu-darmstadt.de/pubpad/33d8c1c" style="width: 100%; height: 480px"></iframe>
+
+<script src="jquery-1.11.3.min.js"></script>
+<script>
+function on_resize() {
+  $("iframe").css('height', $(window).height()-100  + 'px');
+}
+$(window).resize(on_resize);
+on_resize();
+</script>

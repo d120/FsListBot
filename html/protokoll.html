@@ -5,10 +5,11 @@
 
     <script src="jquery-1.11.3.min.js"></script>
     <script src="bootstrap.min.js"></script>
-    <script>
-      $(function () {
-        var lastDate = '2015-05-13';
-        $('#protokoll').attr('src', 'https://www.fachschaft.informatik.tu-darmstadt.de/wiki/Fachschaftssitzung/' + lastDate);
-      });
-    </script>
+    <script src="frame_helper.js"></script>
     
+    <script>
+    $("#protokoll").attr("src", rueckblick_url());
+    $(window).resize(on_resize);
+    on_resize();
+    </script>
+
