@@ -8,7 +8,23 @@
     <script src="frame_helper.js"></script>
     
     <script>
-    $("#protokoll").attr("src", rueckblick_url());
+    var protokollDate = last_wednesday();
+    $("#protokoll").attr("src", protokoll_wiki_url(protokollDate));
+    
+    $("<ul class='nav navbar-nav pull-right'>\
+    <li><a href='#' id='prev'><span class='glyphicon glyphicon-step-backward'></span></a></li>\
+    <li><a href='#' id='next'><span class='glyphicon glyphicon-step-forward'></span></a></li>\
+    </ul>").insertAfter(".navbar-nav");
+    
+    $("#prev").click(function() {
+      protokollDate = last_wednesday(protokollDate);
+      $("#protokoll").attr("src", protokoll_wiki_url(protokollDate));
+    });
+    $("#next").click(function() {
+      protokollDate = next_wednesday(protokollDate);
+      $("#protokoll").attr("src", protokoll_wiki_url(protokollDate));
+    });
+    
     $(window).resize(on_resize);
     on_resize();
     </script>
