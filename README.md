@@ -20,8 +20,13 @@ Als eigene Prozesse:
 
 ```bash
 node fslistbot.js
-sudo ssh -L 0.0.0.0:25:localhost:3001 -i /root/.ssh/id_rsa root@localhost -N
+sudo socat -d -d -d TCP-LISTEN:25,fork,su=nobody TCP:localhost:3001
 ```
+
+Falls kein socat vorhanden ist, kann man auch SSH verwenden, um Port 25 auf Port 3001 weiterzuleiten:
+
+    sudo ssh -L 0.0.0.0:25:localhost:3001 -i /root/.ssh/id_rsa root@localhost -N
+
 
 Einen Webserver nach Wahl als Proxy konfigurieren, z.B. Apache:
 
