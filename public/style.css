@@ -33,3 +33,6 @@ footer {
 a[ng-click] {
   cursor: pointer;
 }
+.orange-stripe {
+  border-top: 8px solid #FFA500;
+}
