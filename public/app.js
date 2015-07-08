@@ -1,8 +1,10 @@
 angular.module('fsListBot', [])
 .controller('mailsCtrl', function ($scope, $http) {
+  moment.locale('de');
+
   $scope.loading = true;
   $scope.mails = [];
-  $scope.since = '13. Mai 2015';
+  $scope.since = moment(last_wednesday()).format('DD. MMMM YYYY');
 
   $http.get('mails').then(function (res) {
     $scope.mails = res.data;
@@ -25,8 +27,6 @@ angular.module('fsListBot', [])
       });
     }
   };
-
-  moment.locale('de');
 
   $(function(){
     $('.datepicker').datetimepicker({
