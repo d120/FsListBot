@@ -6,10 +6,12 @@ angular.module('fsListBot', [])
   $scope.mails = [];
   $scope.since = moment(last_wednesday()).format('DD. MMMM YYYY');
 
-  $http.get('mails').then(function (res) {
-    $scope.mails = res.data;
-  }).finally(function () {
-    $scope.loading = false;
+  $scope.$watch('selectedMonth', function() {
+    $http.get('mails?month=' + $scope.selectedMonth).then(function (res) {
+      $scope.mails = res.data;
+    }).finally(function () {
+      $scope.loading = false;
+    });
   });
 
   $scope.toggleThread = function (item) {
@@ -27,6 +29,14 @@ angular.module('fsListBot', [])
       });
     }
   };
+
+  $scope.months = [];
+  var month = moment();
+  for(var i = 0; i < 50; i++) {
+      $scope.months.push(month.locale('en').format('YYYY-MMMM'));
+      month = month.subtract(1, 'month');
+  }
+  $scope.selectedMonth = $scope.months[0];
 
   $(function(){
     $('.datepicker').datetimepicker({

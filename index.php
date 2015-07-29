@@ -10,9 +10,27 @@ $menu = array(
   '/kalender' => 'Kalender'
 );
 
+$dbh = new PDO('sqlite:data/mailinfo.db');
+$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 $path = @$_SERVER['PATH_INFO'];
 
-$file = '/var/lib/mailman/archives/private/fs/2015-July.txt';
+if (preg_match("#^/mails/([a-z0-9]+)$#", $path, $matches)) {
+  $mail_id = $matches[1];
+  if ($_SERVER["REQUEST_METHOD"] == "PUT") {
+    $put_data = json_decode(file_get_contents("php://input"));
+    header("Content-Type: application/json");
+    $dbh->prepare("DELETE FROM mails WHERE mail_id = ?")->execute(array($mail_id));
+    if ($put_data->done) $dbh->prepare("INSERT INTO mails (mail_id, done) VALUES (?, 1)")->execute(array($mail_id));
+    echo json_encode(array("success" => true));
+  } else if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
+    header("Content-Type: application/json");
+    $dbh->prepare("DELETE FROM mails WHERE mail_id = ?")->execute(array($mail_id));
+    $dbh->prepare("INSERT INTO mails (mail_id, deleted) VALUES (?, 1)")->execute(array($mail_id));
+    echo json_encode(array("success" => true));
+  }
+  return;
+}
 
 switch($path) {
   case '':
@@ -23,23 +41,30 @@ switch($path) {
     break;
   case '/mails':
     header("Content-Type: application/json");
+    if (preg_match('#[^a-zA-Z0-9-]#', $_GET['month'])) { header("HTTP/1.1 400 Bad Request"); die("Bad request"); }
+    $file = '/var/lib/mailman/archives/private/fs/' . $_GET['month'] . '.txt';
     $all_mails = read_mbox($file);
     $references = array();
     $mails = array();
     foreach($all_mails as $m) {
       $id = $m['header']['Message-ID'][0];
+      $q = $dbh->prepare('SELECT * FROM mails WHERE mail_id = ?');
+      $q->execute(array(md5($id)));
+      $dbinfo = $q->fetch();
+      if ($dbinfo && $dbinfo["deleted"]) continue;
       $mail = array("from" => array("name" => $m['header']['From'][0]),
                     "date" => $m['header']['Date'][0],
-		    "done" => 0,
+		    "done" => $dbinfo && $dbinfo['done'],
 		    "subject" => implode("", $m['header']['Subject']),
 		    "id" => $id,
-		    "isReply" => isset($m['header']['In-Reply-To']) ? $m['header']['In-Reply-To'][0]  : false,
+		    "replyToId" => isset($m['header']['In-Reply-To']) ? $m['header']['In-Reply-To'][0]  : false,
+		    "isReply" => isset($m['header']['In-Reply-To']),
 		    "normalizedSubject" => "zzz".md5($id),
 		    "uid" => md5($id),
 		    "headers" => $m['header'],
  		    "text" => $m['body'],);
-      if ($mail["isReply"] && isset($references[$mail["isReply"]])) {
-        $replyTo = $references[$mail["isReply"]];
+      if ($mail["isReply"] && isset($references[$mail["replyToId"]])) {
+        $replyTo = $references[$mail["replyToId"]];
         $mails[$replyTo]['replies'][] = $mail;
 	$references[$id] = $replyTo;
       } else {
