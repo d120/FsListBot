@@ -7,6 +7,7 @@ angular.module('fsListBot', [])
   $scope.since = moment(last_wednesday()).format('DD. MMMM YYYY');
 
   $scope.$watch('selectedMonth', function() {
+    $scope.loading = true;
     $http.get('mails?month=' + $scope.selectedMonth).then(function (res) {
       $scope.mails = res.data;
     }).finally(function () {

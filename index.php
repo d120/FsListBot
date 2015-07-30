@@ -1,7 +1,7 @@
 <?php
 $BASE_URL = $_SERVER['SCRIPT_NAME'];
 mb_internal_encoding("UTF-8");
-
+ini_set("display_errors","on");
 $menu = array(
   '/' => 'Unbeantwortete E-Mails',
   '/protokoll' => 'Rückblick',
@@ -36,12 +36,9 @@ switch($path) {
   case '':
     header("Location: $BASE_URL/");
     break;
-  case '/': case '/inbox': case '/protokoll': case '/sitzungspad': case '/kalender':
-    show_page($path);
-    break;
   case '/mails':
     header("Content-Type: application/json");
-    if (preg_match('#[^a-zA-Z0-9-]#', $_GET['month'])) { header("HTTP/1.1 400 Bad Request"); die("Bad request"); }
+    if (!preg_match('#^[0-9]{4}-[a-zA-Z]+$#', @$_GET['month'])) { header("HTTP/1.1 400 Bad Request"); die(json_encode(array("error" => "Bad Request"))); }
     $file = '/var/lib/mailman/archives/private/fs/' . $_GET['month'] . '.txt';
     $all_mails = read_mbox($file);
     $references = array();
@@ -79,8 +76,7 @@ switch($path) {
     if (show_file('public', $path)) {
     } else if (show_file('vendor', $path)) {
     } else {
-      header("HTTP/1.1 404 Not Found");
-      echo "File not found";
+      show_page($path);
     }
     break;
 }
@@ -88,9 +84,10 @@ switch($path) {
 function show_file($dir, $filename) {
   $dir = dirname(__FILE__) . '/' . $dir;
   $path = realpath($dir . $filename);
-  if ($path && strpos($path, $dir) === 0) {
+  if ($path && is_file($path) && strpos($path, $dir) === 0) {
     if (preg_match('#\.css$#', $path)) header("Content-Type: text/css");
     if (preg_match('#\.js$#', $path)) header("Content-Type: text/javascript");
+    header("Cache-Control: max-age=9001000, public");
     readfile($path);
     return true;
   }// var_dump($path);
@@ -99,18 +96,27 @@ function show_file($dir, $filename) {
 function show_page($name) {
   $menuHtml = "";
   foreach($GLOBALS['menu'] as $url => $text) {
-    $menuHtml .= "<li><a href='$GLOBALS[BASE_URL]$url'>$text</a></li>";
+    $menuHtml .= "<li class=\"".($url==$name?"active":"")."\"><a href='$GLOBALS[BASE_URL]$url'>$text</a></li>";
   }
   $code = file_get_contents("html/template.html");
-  $code = str_replace("{{title}}", $GLOBALS['menu'][$name], $code);
+  $title = @$GLOBALS['menu'][$name];
+  if ($title) {
+    if ($name == '/') $name = '/index';
+    $contents = file_get_contents('html' . $name . '.html');
+  } else {
+    header("HTTP/1.1 404 Not Found");
+    $title = "Not found";
+    $contents = "<div class=container><h2>File Not Found</h2></div>";
+  }
+  $code = str_replace("{{title}}", $title, $code);
   $code = str_replace("{{menu}}", $menuHtml, $code);
-  if ($name == '/') $name = '/index';
-  $code = str_replace("{{content}}", file_get_contents('html' . $name . '.html'), $code);
+  $code = str_replace("{{content}}", $contents, $code);
   echo $code;
 }
 
 function read_mbox($file) {
   $fh = fopen($file, "r");
+  if (!$fh) return false;
   $mails = array(); $lastheader = ""; $mail = false;
   $line = trim(fgets($fh));
   while(!feof($fh)) {

@@ -5,6 +5,9 @@ footer {
   width: 100%;
   text-align: center;
 }
+.mail-text {
+  white-space: pre-wrap; font-family:monospace;
+}
 .fullsize {
   width: 100%;
   height: 1000px;
@@ -35,4 +38,19 @@ a[ng-click] {
 }
 .orange-stripe {
   border-top: 8px solid #FFA500;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+.loading .progress-bar {
+  animation: loadindicator 5s 1 ease;
+}
+#navbar li.active { border-top: 8px solid #CC7500; margin-top: -8px; }
+.navbar a.navbar-brand { color: #666; }
+.navbar-brand span { color: #aaa; }
+.navbar a.navbar-brand:hover, .navbar a.navbar-brand:hover sxxpan { color: #bF5500 }
+@keyframes loadindicator {
+  0% { width: 0%; }
+  50% { width: 90%; }
+  100% { width: 100%; }
 }
