@@ -16,6 +16,8 @@ Neben den E-Mails bietet der Sitzungshelfer auch direkt Zugriff auf das letzte P
 
 ## Deployment
 
+Achtung, veraltet. Seit es das neue PHP-Backend gibt, funktioniert das Deployment anders...
+
 Als eigene Prozesse:
 
 ```bash
@@ -39,4 +41,4 @@ ProxyPassReverse / http://localhost:3000/
 
 GPL Version 2 (in diesem Repository enthalten)
 
-Copyright (C) 2015 Johannes Lauinger
+Copyright (C) 2015 Johannes Lauinger et al.
